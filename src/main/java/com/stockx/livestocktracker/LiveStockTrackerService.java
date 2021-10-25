@@ -18,7 +18,9 @@ public class LiveStockTrackerService {
     @Autowired
     private AmazonSNSClient amazonSNSClient;
 
-    private Gson gson = new Gson();
+    private static final String TOPIC_ARN_PREFIX="arn:aws:sns:us-east-2:411676508182:";
+
+    private final Gson gson = new Gson();
 
     public Stock getStockByTicker(String ticker) {
         return retrievalServiceAdapter.getStockByTicker(ticker);
@@ -29,9 +31,14 @@ public class LiveStockTrackerService {
         Map<String, Stock> updatedSubscribedStocks = retrievalServiceAdapter.getSubscribedStocks();
 
         for (var entry : updatedSubscribedStocks.entrySet()) {
-            PublishRequest publishRequest =
-                    new PublishRequest("arn:aws:sns:us-east-2:411676508182:MSFT", gson.toJson(entry.getValue()));
-            amazonSNSClient.publish(publishRequest);
+            try {
+                PublishRequest publishRequest =
+                        new PublishRequest(TOPIC_ARN_PREFIX+entry.getKey(), gson.toJson(entry.getValue()));
+                amazonSNSClient.publish(publishRequest);
+            }
+            catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
         }
 
     }
