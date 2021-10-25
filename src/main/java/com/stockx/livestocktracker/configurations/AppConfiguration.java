@@ -1,11 +1,12 @@
-package com.stockx.livestocktracker;
+package com.stockx.livestocktracker.configurations;
 
+import com.stockx.livestocktracker.adapters.FinnhubAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class WebConfig {
+public class AppConfiguration {
 
     @Bean
     public RestTemplate restTemplate() {
@@ -13,7 +14,7 @@ public class WebConfig {
     }
 
     @Bean
-    public RetrievalServiceAdapter retrievalServiceAdapter() {
-        return new RetrievalServiceAdapter();
+    public FinnhubAdapter finnhubAdapter() {
+        return new FinnhubAdapter();
     }
 }
