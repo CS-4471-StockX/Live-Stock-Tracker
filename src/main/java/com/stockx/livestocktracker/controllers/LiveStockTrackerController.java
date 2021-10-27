@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
+
 @RestController
 public class LiveStockTrackerController {
 
@@ -17,5 +19,4 @@ public class LiveStockTrackerController {
     public Stock getStockByTicker(@RequestParam("ticker") String ticker) {
         return liveStockTrackerService.getStockByTicker(ticker);
     }
-
 }
