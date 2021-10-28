@@ -12,11 +12,4 @@ public class HistoricalRetrieval {
     @JsonAlias("t")
     private Double[] times;
 
-    public Double[] getClosingPrices(){
-        return closingPrices;
-    }
-
-    public Double[] getTimes() {
-        return times;
-    }
 }

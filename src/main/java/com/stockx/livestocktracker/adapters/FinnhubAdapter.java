@@ -23,6 +23,7 @@ public class FinnhubAdapter {
         return restTemplate.getForObject(url, Stock.class);
     }
 
+    //Interval is used by schedules methods in Service file to indicate frequency of returned historical data.
     public HistoricalRetrieval getStockHistorical(String ticker, char interval){
         String t1;
         String period;
