@@ -37,10 +37,10 @@ public class HistoricalData {
     }
 
     public void setDaysData(String ticker, List<Double> daysData, List<Double> timeData) {
-        List<List<Double>> l = new ArrayList<List<Double>>(2);
-        l.add(daysData);
-        l.add(timeData);
-        this.daysData.put(ticker, l);
+        List<List<Double>> dateTimeList = new ArrayList<List<Double>>(2);
+        dateTimeList.add(daysData);
+        dateTimeList.add(timeData);
+        this.daysData.put(ticker, dateTimeList);
         daysUpdateTime = Instant.ofEpochSecond(0L).until(Instant.now(), ChronoUnit.SECONDS);
     }
 
