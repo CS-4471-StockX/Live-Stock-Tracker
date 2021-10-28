@@ -1,5 +1,6 @@
 package com.stockx.livestocktracker.configurations;
 
+import com.stockx.livestocktracker.HistoricalData;
 import com.stockx.livestocktracker.adapters.FinnhubAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,4 +18,7 @@ public class AppConfiguration {
     public FinnhubAdapter finnhubAdapter() {
         return new FinnhubAdapter();
     }
+
+    @Bean
+    public HistoricalData historicalData() {return new HistoricalData();}
 }
