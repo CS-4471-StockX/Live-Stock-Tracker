@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.stockx.livestocktracker.HistoricalData;
 import com.stockx.livestocktracker.HistoricalRetrieval;
 import com.stockx.livestocktracker.Stock;
+import com.stockx.livestocktracker.SymbolLookupResult;
 import com.stockx.livestocktracker.adapters.FinnhubAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,6 +32,10 @@ public class LiveStockTrackerService {
     private final Gson gson = new Gson();
 
     public Stock getStockByTicker(String ticker) {return finnhubAdapter.getStockByTicker(ticker);}
+
+    public SymbolLookupResult findSymbol(String query) {
+        return finnhubAdapter.symbolLookup(query);
+    }
 
 
     @Scheduled(fixedDelay = 30000)
