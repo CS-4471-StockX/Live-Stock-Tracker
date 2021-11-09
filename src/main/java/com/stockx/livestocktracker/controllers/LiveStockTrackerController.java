@@ -1,5 +1,6 @@
 package com.stockx.livestocktracker.controllers;
 
+import com.stockx.livestocktracker.SymbolLookupResult;
 import com.stockx.livestocktracker.services.LiveStockTrackerService;
 import com.stockx.livestocktracker.Stock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,10 @@ public class LiveStockTrackerController {
     @GetMapping("/stock-quote")
     public Stock getStockByTicker(@RequestParam("ticker") String ticker) {
         return liveStockTrackerService.getStockByTicker(ticker);
+    }
+
+    @GetMapping("/find-symbol")
+    public SymbolLookupResult findSymbol(@RequestParam("query") String query) {
+        return liveStockTrackerService.findSymbol(query);
     }
 }
