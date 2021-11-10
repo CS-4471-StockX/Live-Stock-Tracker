@@ -2,6 +2,7 @@ package com.stockx.livestocktracker.adapters;
 
 import com.stockx.livestocktracker.HistoricalRetrieval;
 import com.stockx.livestocktracker.Stock;
+import com.stockx.livestocktracker.SymbolLookupResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,6 +22,14 @@ public class FinnhubAdapter {
                 .queryParam("token", "c5q4mpqad3iaqkuehumg").build().toUriString();
 
         return restTemplate.getForObject(url, Stock.class);
+    }
+
+    public SymbolLookupResult symbolLookup(String query) {
+        String url = UriComponentsBuilder.fromUriString(BASE_URL).path("/search")
+                .queryParam("q", query)
+                .queryParam("token", "c5q4mpqad3iaqkuehumg").build().toUriString();
+
+        return restTemplate.getForObject(url, SymbolLookupResult.class);
     }
 
     //Interval is used by schedules methods in Service file to indicate frequency of returned historical data.
