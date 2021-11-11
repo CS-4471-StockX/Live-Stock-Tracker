@@ -27,17 +27,17 @@ public class LiveStockTrackerController {
         return liveStockTrackerService.findSymbol(query);
     }
 
-    @GetMapping("/stock-day")
+    @GetMapping("/stock-days")
     public Object[] getDayStock(@RequestParam("ticker") String ticker) {
         return liveStockTrackerService.getDayStock(ticker);
     }
 
-    @GetMapping("/stock-hour")
+    @GetMapping("/stock-hours")
     public Double[] getHourPricesStock(@RequestParam("ticker") String ticker) {
         return liveStockTrackerService.getHourPricesStock(ticker);
     }
 
-    @GetMapping("/stock-minute")
+    @GetMapping("/stock-minutes")
     public Object[] getMinuteStock(@RequestParam("ticker") String ticker) {
         return liveStockTrackerService.getMinuteStock(ticker);
     }
