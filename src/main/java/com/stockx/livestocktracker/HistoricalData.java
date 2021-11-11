@@ -16,7 +16,8 @@ public class HistoricalData {
     private long minutesUpdateTime;
     private long hoursUpdateTime;
     private long daysUpdateTime;
-    private ZoneId currentTimeZone = ZoneId.systemDefault();    //Gets system time zone
+    //private ZoneId currentTimeZone = ZoneId.systemDefault();    //Gets system time zone
+    private ZoneId currentTimeZone = ZoneId.of("America/Toronto");
     private int marketOpenHour = 9;
 
 
@@ -67,6 +68,7 @@ public class HistoricalData {
 
         for (int i = 0; i < daysData.size(); i++) {
             dayPricesArray[i] = daysData.get(i);
+            System.out.println("Day Prices Array: " + dayPricesArray[i] + " List: "+ daysData.get(i)+ " Index:" + i);
         }
         
         for (int i = 0; i < timeData.size(); i++) {
@@ -74,6 +76,7 @@ public class HistoricalData {
             ZonedDateTime dayTime = this.getZonedTime(dayEpochTime);
             formattedTime = dayTime.format(formatter);  //Gets the date and time in a readable string
             dayLabelsArray[i] = formattedTime;
+            System.out.println("Day Time Array: " + dayLabelsArray[i] + " List: "+ timeData.get(i).longValue() + " Index:" + i);
         }
 
         dayPrices.put(ticker, dayPricesArray);
@@ -98,16 +101,12 @@ public class HistoricalData {
         return instant.atZone(currentTimeZone); //Get time stuff in this time zone
     }
 
-    /* We can hard code in the front end
-    public String[] getHourLabels(){
-        String[] hourLabels = new String[] {"9am", "10am", "11am", "12pm", "1pm", "2pm", "3pm", "4pm", "5pm"};
-        return hourLabels;
-    }
-     */
-
     //Converts the current day's hourly data from a list to array
     public Double[] getHourPricesArray(String ticker){
+
         Double[] prices = new Double[9];    //Hours the exchange is open (9-17)
+        Arrays.fill(prices, 0.0);
+
         long currentEpochTime = Instant.ofEpochSecond(0L).until(Instant.now(), ChronoUnit.SECONDS);
 
         ZonedDateTime currentTime = this.getZonedTime(currentEpochTime);
@@ -121,12 +120,18 @@ public class HistoricalData {
                 prices[i] = hoursData.get(ticker).get(i);
             }
         }
+
         return prices;
     }
 
     //Labels the last 60 minutes of data
     public String[] getMinuteLabels() {
         String[] minuteLabels = new String[60];
+
+        for(int i = 0; i < minuteLabels.length; i++){
+            minuteLabels[i] = "Error: " + i;
+        }
+
         String formattedTime;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");  //Hour and minutes
 
@@ -135,7 +140,7 @@ public class HistoricalData {
         for (int i = 59; i >= 0; i--) { //Puts the latest data in the last index, first
             formattedTime = latestTime.format(formatter);  //Gets the date and time in a readable string
             minuteLabels[i] = formattedTime;
-            latestTime.minusMinutes(1); //Gets an earlier time
+            latestTime = latestTime.minusMinutes(1); //Gets an earlier time
         }
         return minuteLabels;
     }
@@ -143,6 +148,7 @@ public class HistoricalData {
     //Stores the price data
     public Double[] getMinutePricesArray(String ticker){
         Double[] prices = new Double[60];
+        Arrays.fill(prices, 0.0);
 
         ZonedDateTime latestTime = this.getZonedTime(minutesUpdateTime);
         int hour = latestTime.getHour();
