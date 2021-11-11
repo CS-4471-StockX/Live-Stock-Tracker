@@ -37,6 +37,12 @@ public class LiveStockTrackerService {
         return finnhubAdapter.symbolLookup(query);
     }
 
+    public Object[] getDayStock(String ticker) {return historicalData.getDayArrays(ticker);}
+
+    public Double[] getHourPricesStock(String ticker) {return historicalData.getHourPricesArray(ticker);}
+
+    public Object[] getMinuteStock(String ticker) {return historicalData.getMinuteArrays(ticker);}
+
 
     @Scheduled(fixedDelay = 30000)
     private void updateSubscribedStocks() {

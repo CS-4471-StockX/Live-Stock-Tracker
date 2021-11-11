@@ -27,21 +27,19 @@ public class LiveStockTrackerController {
         return liveStockTrackerService.findSymbol(query);
     }
 
-    /*
     @GetMapping("/stock-day")
-    public HistoricalData getDayArrays(@RequestParam("ticker") String ticker) {
-        return liveStockTrackerService.getDayArrays(ticker);
+    public Object[] getDayStock(@RequestParam("ticker") String ticker) {
+        return liveStockTrackerService.getDayStock(ticker);
     }
 
     @GetMapping("/stock-hour")
-    public HistoricalData getHourPricesArray(@RequestParam("ticker") String ticker) {
-        return liveStockTrackerService.getHourPricesArray(ticker);
+    public Double[] getHourPricesStock(@RequestParam("ticker") String ticker) {
+        return liveStockTrackerService.getHourPricesStock(ticker);
     }
 
     @GetMapping("/stock-minute")
-    public HistoricalData getMinuteArrays(@RequestParam("ticker") String ticker) {
-        return liveStockTrackerService.getMinuteArrays(ticker);
+    public Object[] getMinuteStock(@RequestParam("ticker") String ticker) {
+        return liveStockTrackerService.getMinuteStock(ticker);
     }
 
-     */
 }
