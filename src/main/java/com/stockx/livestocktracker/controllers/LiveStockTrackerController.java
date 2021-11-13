@@ -1,5 +1,6 @@
 package com.stockx.livestocktracker.controllers;
 
+import com.stockx.livestocktracker.Graphs;
 import com.stockx.livestocktracker.SymbolLookupResult;
 import com.stockx.livestocktracker.services.LiveStockTrackerService;
 import com.stockx.livestocktracker.Stock;
@@ -27,19 +28,24 @@ public class LiveStockTrackerController {
         return liveStockTrackerService.findSymbol(query);
     }
 
-    @GetMapping("/stock-days")
-    public Object[] getDayStock(@RequestParam("ticker") String ticker) {
-        return liveStockTrackerService.getDayStock(ticker);
+    @GetMapping("/graphs")
+    public Graphs getGraphs(@RequestParam("ticker") String ticker) {
+        return liveStockTrackerService.getGraphs(ticker);
     }
 
-    @GetMapping("/stock-hours")
-    public Double[] getHourPricesStock(@RequestParam("ticker") String ticker) {
-        return liveStockTrackerService.getHourPricesStock(ticker);
+    @GetMapping("/update-minutes")
+    public void updateMinutes(@RequestParam("ticker") String ticker){
+        liveStockTrackerService.updateMinutes(ticker);
     }
 
-    @GetMapping("/stock-minutes")
-    public Object[] getMinuteStock(@RequestParam("ticker") String ticker) {
-        return liveStockTrackerService.getMinuteStock(ticker);
+    @GetMapping("/update-hours")
+    public void updateHours(@RequestParam("ticker") String ticker){
+        liveStockTrackerService.updateHours(ticker);
+    }
+
+    @GetMapping("/update-days")
+    public void updateDays(@RequestParam("ticker") String ticker){
+        liveStockTrackerService.updateDays(ticker);
     }
 
 }
