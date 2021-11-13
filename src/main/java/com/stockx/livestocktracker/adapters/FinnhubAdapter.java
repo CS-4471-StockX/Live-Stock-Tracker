@@ -1,6 +1,6 @@
 package com.stockx.livestocktracker.adapters;
 
-import com.stockx.livestocktracker.HistoricalRetrieval;
+import com.stockx.livestocktracker.Retrieval;
 import com.stockx.livestocktracker.Stock;
 import com.stockx.livestocktracker.SymbolLookupResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +33,12 @@ public class FinnhubAdapter {
     }
 
     //Interval is used by schedules methods in Service file to indicate frequency of returned historical data.
-    public HistoricalRetrieval getStockHistorical(String ticker, char interval){
+    public Retrieval getStockHistorical(String ticker, char interval){
         String t1;
         String period;
 
         if(interval == 'm'){
-            t1 = String.valueOf((Instant.ofEpochSecond(0L).until(Instant.now(), ChronoUnit.SECONDS)) -3600);
+            t1 = String.valueOf((Instant.ofEpochSecond(0L).until(Instant.now(), ChronoUnit.SECONDS)) -3660);
             period = "1";
         }
         else if(interval == 'h'){
@@ -61,7 +61,7 @@ public class FinnhubAdapter {
                 .queryParam("to", t2)
                 .queryParam("token", "c5q4mpqad3iaqkuehumg").build().toUriString();
 
-        return restTemplate.getForObject(url, HistoricalRetrieval.class);
+        return restTemplate.getForObject(url, Retrieval.class);
     }
 
 
