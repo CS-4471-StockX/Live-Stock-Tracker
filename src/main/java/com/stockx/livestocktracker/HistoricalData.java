@@ -1,58 +1,53 @@
 package com.stockx.livestocktracker;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import com.stockx.livestocktracker.adapters.FinnhubAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
 import java.util.*;
 
 public class HistoricalData {
 
-    private Map<String,List<Double>> minutesData = new HashMap<>();
-    private Map<String, List<Double>> hoursData = new HashMap<>();
-    private Map<String, List<List<Double>>> daysData = new HashMap<>();
+    @Autowired
+    private FinnhubAdapter finnhubAdapter;
 
-    private long minutesUpdateTime;
-    private long hoursUpdateTime;
-    private long daysUpdateTime;
 
-    public List<Double> getMinutesData(String ticker){
-        return minutesData.get(ticker);
+    private Map<String, Graph> minutesData = new HashMap<>();
+    private Map<String, Graph> hoursData = new HashMap<>();
+    private Map<String, Graph> daysData = new HashMap<>();
+
+
+    public Graph getMinutesData(String ticker) {
+        if (minutesData.containsKey(ticker)) {
+            return minutesData.get(ticker);
+        }
+        return (new Graph(finnhubAdapter.getStockHistorical(ticker, 'm'), 'm'));
     }
 
-    public List<Double> getHoursData(String ticker){
-        return hoursData.get(ticker);
+    public Graph getHoursData(String ticker) {
+        if (hoursData.containsKey(ticker)) {
+            return hoursData.get(ticker);
+        }
+        return (new Graph(finnhubAdapter.getStockHistorical(ticker, 'h'), 'h'));
     }
 
-    public List<List<Double>> getDaysData(String ticker){
-        return daysData.get(ticker);
+    public Graph getDaysData(String ticker) {
+        if (daysData.containsKey(ticker)) {
+            return daysData.get(ticker);
+        }
+        return (new Graph(finnhubAdapter.getStockHistorical(ticker, 'd'), 'd'));
     }
 
-    public void setMinutesData(String ticker, List<Double> minutesData){
-        this.minutesData.put(ticker, minutesData);
-        minutesUpdateTime = Instant.ofEpochSecond(0L).until(Instant.now(), ChronoUnit.SECONDS);
+    public void updateMinute(String ticker){
+        minutesData.put(ticker, new Graph(finnhubAdapter.getStockHistorical(ticker, 'm'), 'm'));
     }
 
-    public void setHoursData(String ticker, List<Double> hoursData) {
-        this.hoursData.put(ticker, hoursData);
-        hoursUpdateTime = Instant.ofEpochSecond(0L).until(Instant.now(), ChronoUnit.SECONDS);
+    public void updateHours(String ticker){
+        hoursData.put(ticker,  new Graph(finnhubAdapter.getStockHistorical(ticker, 'h'), 'h'));
     }
 
-    public void setDaysData(String ticker, List<Double> daysData, List<Double> timeData) {
-        List<List<Double>> dateTimeList = new ArrayList<List<Double>>(2);
-        dateTimeList.add(daysData);
-        dateTimeList.add(timeData);
-        this.daysData.put(ticker, dateTimeList);
-        daysUpdateTime = Instant.ofEpochSecond(0L).until(Instant.now(), ChronoUnit.SECONDS);
+    public void updateDays(String ticker){
+        daysData.put(ticker, new Graph(finnhubAdapter.getStockHistorical(ticker, 'd'), 'd'));
     }
 
-    public long getMinutesUpdateTime(){
-        return minutesUpdateTime;
-    }
-
-    public long getHoursUpdateTime() {
-        return hoursUpdateTime;
-    }
-
-    public long getDaysUpdateTime() {
-        return daysUpdateTime;
-    }
 }
