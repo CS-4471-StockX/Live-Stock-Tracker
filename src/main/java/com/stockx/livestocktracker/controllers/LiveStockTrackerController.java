@@ -4,9 +4,9 @@ import com.stockx.livestocktracker.Graphs;
 import com.stockx.livestocktracker.SymbolLookupResult;
 import com.stockx.livestocktracker.services.LiveStockTrackerService;
 import com.stockx.livestocktracker.Stock;
-import com.stockx.livestocktracker.HistoricalData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,17 +33,17 @@ public class LiveStockTrackerController {
         return liveStockTrackerService.getGraphs(ticker);
     }
 
-    @GetMapping("/update-minutes")
+    @PutMapping("/update-minutes")
     public void updateMinutes(@RequestParam("ticker") String ticker){
         liveStockTrackerService.updateMinutes(ticker);
     }
 
-    @GetMapping("/update-hours")
+    @PutMapping("/update-hours")
     public void updateHours(@RequestParam("ticker") String ticker){
         liveStockTrackerService.updateHours(ticker);
     }
 
-    @GetMapping("/update-days")
+    @PutMapping("/update-days")
     public void updateDays(@RequestParam("ticker") String ticker){
         liveStockTrackerService.updateDays(ticker);
     }
