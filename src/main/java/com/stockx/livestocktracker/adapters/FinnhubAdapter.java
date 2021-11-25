@@ -36,11 +36,15 @@ public class FinnhubAdapter {
     }
 
     public SymbolLookupResult symbolLookup(String query) {
-        String url = UriComponentsBuilder.fromUriString(BASE_URL).path("/search")
-                .queryParam("q", query)
-                .queryParam("token", API_TOKEN_2).build().toUriString();
-
-        return restTemplate.getForObject(url, SymbolLookupResult.class);
+        SymbolLookupResult result = null;
+        try {
+            result = restTemplate.getForObject(getUrlForSearch(API_TOKEN_1, query), SymbolLookupResult.class);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
+                result = restTemplate.getForObject(getUrlForSearch(API_TOKEN_2, query), SymbolLookupResult.class);
+            }
+        }
+        return result;
     }
 
     //Interval is used by schedules methods in Service file to indicate frequency of returned historical data.
@@ -62,19 +66,37 @@ public class FinnhubAdapter {
         }
 
         String t2 = String.valueOf(Instant.ofEpochSecond(0L).until(Instant.now(), ChronoUnit.SECONDS));
-        String url = UriComponentsBuilder.fromUriString(BASE_URL).path("/stock/candle")
-                .queryParam("symbol", ticker)
-                .queryParam("resolution", period)
-                .queryParam("from", t1)
-                .queryParam("to", t2)
-                .queryParam("token", API_TOKEN_1).build().toUriString();
 
-        return restTemplate.getForObject(url, Retrieval.class);
+        Retrieval result = null;
+        try {
+            result = restTemplate.getForObject(getUrlForHistoric(API_TOKEN_1, ticker, period, t1, t2), Retrieval.class);
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
+                result = restTemplate.getForObject(getUrlForHistoric(API_TOKEN_2, ticker, period, t1, t2), Retrieval.class);
+            }
+        }
+
+        return result;
     }
 
     private String getUrlForQuote(String apiToken, String ticker) {
         return UriComponentsBuilder.fromUriString(BASE_URL).path("/quote")
                 .queryParam("symbol", ticker)
+                .queryParam("token", apiToken).build().toUriString();
+    }
+
+    private String getUrlForSearch(String apiToken, String query) {
+        return UriComponentsBuilder.fromUriString(BASE_URL).path("/search")
+                .queryParam("q", query)
+                .queryParam("token", apiToken).build().toUriString();
+    }
+
+    private String getUrlForHistoric(String apiToken, String ticker, String period, String t1, String t2) {
+        return UriComponentsBuilder.fromUriString(BASE_URL).path("/stock/candle")
+                .queryParam("symbol", ticker)
+                .queryParam("resolution", period)
+                .queryParam("from", t1)
+                .queryParam("to", t2)
                 .queryParam("token", apiToken).build().toUriString();
     }
 
