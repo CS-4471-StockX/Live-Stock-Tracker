@@ -14,19 +14,19 @@ public class LiveStockTrackerController {
     @Autowired
     private LiveStockTrackerService liveStockTrackerService;
 
-    @CrossOrigin(origins = "https://www.stockx.software")
+    @CrossOrigin(origins = "*")
     @GetMapping("/stock-quote")
     public Stock getStockByTicker(@RequestParam("ticker") String ticker) {
         return liveStockTrackerService.getStockByTicker(ticker);
     }
 
-    @CrossOrigin(origins = "https://www.stockx.software")
+    @CrossOrigin(origins = "*")
     @GetMapping("/find-symbol")
     public SymbolLookupResult findSymbol(@RequestParam("query") String query) {
         return liveStockTrackerService.findSymbol(query);
     }
 
-    @CrossOrigin(origins = "https://www.stockx.software")
+    @CrossOrigin(origins = "*")
     @GetMapping("/graphs")
     public Graphs getGraphs(@RequestParam("ticker") String ticker) {
         return liveStockTrackerService.getGraphs(ticker);
